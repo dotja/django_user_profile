@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %} {% endblock %}</title>
+</head>
+
+
+<body style="text-align:center;padding-top:50px;">
+	<a href="{% url 'home' %}">home</a>
+
+	{% block body %} {% endblock %}
+
+
+</body>
+
+</html>
