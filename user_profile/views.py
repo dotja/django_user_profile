@@ -28,7 +28,7 @@ def user_signup(request):
 			login(request, user_auth)
 			return redirect('home')
 		except:
-			messages.add_message(request, messages.ERROR, 'something went wrong.')
+			messages.add_message(request, messages.ERROR, 'Unable to sign up.')
 			return render(request, 'user_profile/signup.html')
 	return render(request, 'user_profile/signup.html')
 
@@ -44,7 +44,7 @@ def user_login(request):
 			request.session['username'] = username
 			return redirect('home')
 		except:
-			messages.add_message(request, messages.ERROR, "Hmmm, something wasn't right.")
+			messages.add_message(request, messages.ERROR, "Unable to log in.")
 			return render(request, 'user_profile/login.html')
 	else:
 		return render(request, 'user_profile/login.html')
@@ -53,9 +53,9 @@ def user_login(request):
 def user_logout(request):
 	try:
 		logout(request)
-		messages.add_message(request, messages.INFO, 'Your logged Out!')
+		messages.add_message(request, messages.INFO, 'You\'re logged Out!')
 	except:
-		messages.add_message(request, messages.ERROR, "Hmmm, something wasn't right.")
+		messages.add_message(request, messages.ERROR, "Unable to log out.")
 	return redirect('home')
 
 
@@ -64,8 +64,7 @@ def user_profile(request, user_id):
 	if request.method == 'POST':
 		user_obj = User.objects.get(id=user_id)
 		user_profile_obj = UserProfile.objects.get(id=user_id)
-#
-#		try:
+		try:
 		user_img = request.FILES['user_img']
 		fs_handle = FileSystemStorage()
 		img_name = 'images/user_{0}'.format(user_id)
@@ -75,8 +74,8 @@ def user_profile(request, user_id):
 		user_profile_obj.profile_img = img_name
 		user_profile_obj.save()
 		user_profile_obj.refresh_from_db()
-#		except:
-#			messages.add_message(request, messages.ERROR, "Hmmm, something wasn't right.")
+		except:
+			messages.add_message(request, messages.ERROR, "Unable to update image..")
 
 		return render(request, 'user_profile/my_profile.html', {'my_profile': user_profile_obj})
 	if (request.user.is_authenticated and request.user.id == user_id):
